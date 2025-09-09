@@ -73,3 +73,7 @@ local_settings.py
 *.tar.gz
 Pipfile
 Pipfile.lock
+
+
+#
+tests/openwisp2/.monitoring-venv/*
