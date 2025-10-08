@@ -41,7 +41,7 @@ class AbstractCheck(TimeStampedEditableModel):
         _("parameters"),
         default=dict,
         blank=True,
-        help_text=_("parameters needed to perform the check"),
+        help_text=_("parameters needed to perform the check rvbuivrebiuvruvrervrejvrjvrjrve j9"),
         load_kwargs={"object_pairs_hook": OrderedDict},
         dump_kwargs={"indent": 4},
     )
