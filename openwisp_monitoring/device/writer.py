@@ -142,10 +142,13 @@ class DeviceDataWriter(object):
                     time=time,
                 )
             if "disk" in data["resources"]:
+                logger.warning(f"before writing DISK,\n {data["resources"]["disk"]}")
+                # logger.warning(")
                 self._write_disk(
                     data["resources"]["disk"], self.device_data.pk, ct, time=time
                 )
             if "memory" in data["resources"]:
+                logger.warning(f"before writing MEMORY,\n {data["resources"]["memory"]}")
                 self._write_memory(
                     data["resources"]["memory"],
                     self.device_data.pk,
@@ -299,9 +302,12 @@ class DeviceDataWriter(object):
         metric, created = Metric._get_or_create(
             object_id=primary_key, content_type_id=content_type.id, configuration="disk"
         )
+        logger.warning(f"---------------\npost processed DISK \n {disk}\n------------------")
         if created:
             self._create_resources_chart(metric, resource="disk")
             self._create_resources_alert_settings(metric, resource="disk")
+        else:
+            logger.error("failed to write disk")
         self._append_metric_data(
             metric, 100 * used_bytes / size_bytes, current, time=time
         )
@@ -327,6 +333,7 @@ class DeviceDataWriter(object):
                 percent_used = 100 * (
                     1 - (memory["available"] + memory["buffered"]) / memory["total"]
                 )
+        logger.warning(f"-------------\npost processed MEMORY: {memory}\n--------------")
         metric, created = Metric._get_or_create(
             object_id=primary_key,
             content_type_id=content_type.id,
@@ -335,6 +342,8 @@ class DeviceDataWriter(object):
         if created:
             self._create_resources_chart(metric, resource="memory")
             self._create_resources_alert_settings(metric, resource="memory")
+        else:
+            logger.error("failed to write memory")
         self._append_metric_data(
             metric, percent_used, current, time=time, extra_values=extra_values
         )
