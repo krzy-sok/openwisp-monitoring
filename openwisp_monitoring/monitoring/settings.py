@@ -3,7 +3,7 @@ from ..settings import get_settings_value
 ADDITIONAL_CHARTS = get_settings_value("CHARTS", {})
 ADDITIONAL_METRICS = get_settings_value("METRICS", {
     "test":{
-        "label": _("test probe"),
+        "label": "test probe",
         "name": "test probe",
         "key": "testprobe",
         "field_name": "test_field",
