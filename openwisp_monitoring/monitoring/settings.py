@@ -1,7 +1,14 @@
 from ..settings import get_settings_value
 
 ADDITIONAL_CHARTS = get_settings_value("CHARTS", {})
-ADDITIONAL_METRICS = get_settings_value("METRICS", {})
+ADDITIONAL_METRICS = get_settings_value("METRICS", {
+    "test":{
+        "label": _("test probe"),
+        "name": "test probe",
+        "key": "testprobe",
+        "field_name": "test_field",
+        "related_fields": ["loss", "rtt_min", "rtt_max", "rtt_avg"],
+    }})
 
 RETRY_OPTIONS = get_settings_value(
     "WRITE_RETRY_OPTIONS",
