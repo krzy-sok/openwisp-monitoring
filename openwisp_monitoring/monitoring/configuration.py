@@ -766,6 +766,12 @@ DEFAULT_METRICS = {
             },
         },
     },
+    "test":{
+        "label": _("test probe"),
+        "name": "test probe",
+        "key": "testprobe",
+        "field_name": "test_field",
+    }
 }
 
 DEFAULT_CHARTS = {}
