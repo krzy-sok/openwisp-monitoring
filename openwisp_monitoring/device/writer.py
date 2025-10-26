@@ -156,6 +156,8 @@ class DeviceDataWriter(object):
                     current,
                     time=time,
                 )
+        if "test_probe" in data:
+            self._write_test_probe(data["test_probe"], self.device_data.pk, ct, current, time=time)
         try:
             Metric.batch_write(self.write_device_metrics)
         except ValueError as error:
@@ -163,6 +165,34 @@ class DeviceDataWriter(object):
                 f'Failed to write metrics for "{self.device_data.pk}" device.'
                 f" Error: {error}"
             )
+
+    def _write_test_probe(self, data, primary_key,content_type, current = False, time = None):
+        # pre processing here
+        pass
+        # ensure metric is created (metrics.settings.additional_metrics)
+        metric, created = Metric._get_or_create(
+            object_id=primary_key,
+            content_type_id=content_type.id,
+            configuration="test_probe",
+        )
+        if created:
+            pass
+            with open("/works.txt", "a") as file:
+                file.write(f"shit's bussin as of {datetime.now()}")
+            # no charts yet
+            # self._create_resources_chart(metric, resource="memory")
+            # self._create_resources_alert_settings(metric, resource="memory")
+            # set extra values for interface, ip, mac etc
+            # no cocnlusion yet?
+            # maybe send to model in preprocessing
+            # extra_values=
+        else:
+            logger.error("failed to write test_probe")
+            with open("/works.txt", "a") as file:
+                file.write(f"bo womp as of {datetime.now()}")
+        self._append_metric_data(
+            metric, data["rtt"], current, time=time, extra_values={}
+        )
 
     def _get_extra_tags(self, device):
         tags = {"organization_id": str(device.organization_id)}
