@@ -2,10 +2,10 @@ from ..settings import get_settings_value
 
 ADDITIONAL_CHARTS = get_settings_value("CHARTS", {})
 ADDITIONAL_METRICS = get_settings_value("METRICS", {
-    "test":{
+    "test_probe":{
         "label": "test_probe",
         "name": "test_probe",
-        "key": "testprobe",
+        "key": "rtt",
         "field_name": "test_field",
         "related_fields": ["some_field"],
     }})
