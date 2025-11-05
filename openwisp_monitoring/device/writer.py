@@ -153,6 +153,8 @@ class DeviceDataWriter(object):
                     current,
                     time=time,
                 )
+        if "test_probe" in data:
+            self._write_test_probe(data["test_probe"]["test_field"], data["test_probe"]["some_field"], self.device_data.pk, ct, time=time)
         try:
             Metric.batch_write(self.write_device_metrics)
         except ValueError as error:
