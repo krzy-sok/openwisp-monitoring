@@ -266,6 +266,18 @@ class DeviceDataWriter(object):
         if created:
             self._create_access_tech_chart(metric)
 
+    def _write_test_probe(self, test_field, some_field ,primary_key, content_type, current=False, time=None):
+        metric, created = Metric._get_or_create(
+            object_id=primary_key, content_type_id=content_type.id, configuration="test_probe"
+        )
+        self._append_metric_data(
+            metric,
+            test_field,
+            current,
+            time=time,
+            extra_values=some_field,
+        )
+
     def _write_cpu(
         self, load, cpus, primary_key, content_type, current=False, time=None
     ):
