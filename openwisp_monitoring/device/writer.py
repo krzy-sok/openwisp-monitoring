@@ -274,10 +274,12 @@ class DeviceDataWriter(object):
         )
         self._append_metric_data(
             metric,
+            # only this got written
             test_field,
             current,
             time=time,
-            extra_values=some_field,
+            # extras got ignored
+            extra_values={"some_field":some_field},
         )
 
     def _write_cpu(
