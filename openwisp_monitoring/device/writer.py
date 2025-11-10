@@ -272,6 +272,9 @@ class DeviceDataWriter(object):
         metric, created = Metric._get_or_create(
             object_id=primary_key, content_type_id=content_type.id, configuration="test_probe"
         )
+        if created:
+            self._create_resources_chart(metric, resource="test_probe")
+            # self._create_resources_alert_settings(metric, resource="test_probe")
         self._append_metric_data(
             metric,
             # only this got written
