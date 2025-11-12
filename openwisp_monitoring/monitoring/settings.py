@@ -1,4 +1,5 @@
 from ..settings import get_settings_value
+from django.utils.translation import gettext_lazy as _
 
 from openwisp_monitoring.db import chart_query
 
@@ -14,10 +15,15 @@ ADDITIONAL_METRICS = get_settings_value("METRICS", {
             "test_probe_chart": {
                 "type": "bar",
                 "title": _("Sample chart"),
+                "description": _(
+                    "example chart"
+                ),
                 "summary_labels": [_("Sample chart")],
                 "unit": "num",
                 "order": 200,
-                "query": chart_query["test_field"]
+                "query": {
+                    "influxdb":("SELECT test_field from test_field")
+                }
             }
         }
     }
