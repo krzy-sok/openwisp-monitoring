@@ -155,6 +155,8 @@ class DeviceDataWriter(object):
                 )
         if "test_probe" in data:
             self._write_test_probe(data["test_probe"]["test_field"], data["test_probe"]["some_field"], self.device_data.pk, ct, time=time)
+        if "test_probe" in data:
+            self._write_test_probe(data["probes"]["ip"], data["probes"], self.device_data.pk, ct, time=time)
         try:
             Metric.batch_write(self.write_device_metrics)
         except ValueError as error:
@@ -283,6 +285,23 @@ class DeviceDataWriter(object):
             time=time,
             # extras got ignored
             extra_values={"some_field":some_field},
+        )
+
+    def _write_probes(self, ip, probes ,primary_key, content_type, current=False, time=None):
+        metric, created = Metric._get_or_create(
+            object_id=primary_key, content_type_id=content_type.id, configuration="probes"
+        )
+        if created:
+            self._create_resources_chart(metric, resource="probes")
+            # self._create_resources_alert_settings(metric, resource="test_probe")
+        self._append_metric_data(
+            metric,
+            # only this got written
+            ip,
+            current,
+            time=time,
+            # extras got ignored
+            extra_values={"rtt":probes["rtt"], "mac": probes["mac"], "device_timestamp": probes["device_timestamp"]},
         )
 
     def _write_cpu(
