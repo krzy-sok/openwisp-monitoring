@@ -297,10 +297,11 @@ class DeviceDataWriter(object):
         for probe in probes:
             self._append_metric_data(
                 metric,
+                # this gives the name?
                 probe['ip'],
                 current,
                 time=time,
-                extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "device_timestamp": probe["timestamp"]},
+                extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "device_timestamp": probe["timestamp"], "flood_flag": probe["flood_flag"], "interface": probe["interface"]},
             )
 
     def _write_cpu(
