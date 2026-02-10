@@ -31,6 +31,7 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
         "probes": {
             "label": "probes",
             "name": "probes",
+            "key": "ip",
             "field_name": "ip",
             # all fields are keys in influx - meaning indexed and can group by them
             "related_fields": ["mac" , "rtt", "device_timestamp"],
