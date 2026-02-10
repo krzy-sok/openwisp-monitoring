@@ -31,11 +31,8 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
         "probes": {
             "label": "probes",
             "name": "probes",
-            # kay and field nam used in charts creation
             "key": "anti_sniffer_probes",
-            # change field name to name
-            "field_name": "anti_sniffer_probes",
-            # all fields are keys in influx - meaning indexed and can group by them
+            "field_name": "probes",
             "related_fields": ["mac" , "rtt", "device_timestamp", "flood_flag", "interface", "ip"],
             "charts": {
                 "probe_rtt_chart": {

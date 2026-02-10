@@ -301,7 +301,7 @@ class DeviceDataWriter(object):
                 probe['ip'],
                 current,
                 time=time,
-                extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "device_timestamp": probe["timestamp"], "flood_flag": probe["flood_flag"], "interface": probe["interface"]},
+                extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "device_timestamp": probe["timestamp"], "flood_flag": probe["flood_flag"], "interface": probe["interface"], "ip": probe["ip"]},
             )
 
     def _write_cpu(
