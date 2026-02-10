@@ -297,7 +297,7 @@ class DeviceDataWriter(object):
         for probe in probes:
             self._append_metric_data(
                 metric,
-                probe[ip],
+                probe['ip'],
                 current,
                 time=time,
                 extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "device_timestamp": probe["timestamp"]},
