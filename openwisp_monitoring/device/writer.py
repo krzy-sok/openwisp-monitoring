@@ -156,7 +156,7 @@ class DeviceDataWriter(object):
         if "test_probe" in data:
             self._write_test_probe(data["test_probe"]["test_field"], data["test_probe"]["some_field"], self.device_data.pk, ct, time=time)
         if "probes" in data:
-            self._write_probes(data["probes"]["ip"], data["probes"], self.device_data.pk, ct, time=time)
+            self._write_probes(data["probes"], self.device_data.pk, ct, time=time)
         try:
             Metric.batch_write(self.write_device_metrics)
         except ValueError as error:
@@ -270,7 +270,7 @@ class DeviceDataWriter(object):
         if created:
             self._create_access_tech_chart(metric)
 
-    def _write_test_probe(self, test_field, some_field ,primary_key, content_type, current=False, time=None):
+    def _write_test_probe(self, test_field, some_field, primary_key, content_type, current=False, time=None):
         metric, created = Metric._get_or_create(
             object_id=primary_key, content_type_id=content_type.id, configuration="test_probe"
         )
@@ -287,22 +287,21 @@ class DeviceDataWriter(object):
             extra_values={"some_field":some_field},
         )
 
-    def _write_probes(self, ip, probes ,primary_key, content_type, current=False, time=None):
+    def _write_probes(self, probes ,primary_key, content_type, current=False, time=None):
         metric, created = Metric._get_or_create(
             object_id=primary_key, content_type_id=content_type.id, configuration="probes"
         )
         if created:
             self._create_resources_chart(metric, resource="probes")
             # self._create_resources_alert_settings(metric, resource="test_probe")
-        self._append_metric_data(
-            metric,
-            # only this got written
-            ip,
-            current,
-            time=time,
-            # extras got ignored
-            extra_values={"rtt":probes["rtt"], "mac": probes["mac"], "device_timestamp": probes["device_timestamp"]},
-        )
+        for probe in probes:
+            self._append_metric_data(
+                metric,
+                probe[ip],
+                current,
+                time=time,
+                extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "device_timestamp": probe["timestamp"]},
+            )
 
     def _write_cpu(
         self, load, cpus, primary_key, content_type, current=False, time=None
