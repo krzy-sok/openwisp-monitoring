@@ -296,10 +296,10 @@ class DeviceDataWriter(object):
             self._append_metric_data(
                 metric,
                 # this gives the name?
-                probe["timestamp"],
+                probe["rtt"],
                 current,
-                time=time,
-                extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "ip": probe["ip"], "flood_flag": probe["flood_flag"], "interface": probe["interface"], "ip": probe["ip"]},
+                time=probe["timestamp"],
+                extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "ip": probe["ip"], "flood_flag": probe["flood_flag"], "interface": probe["interface"]},
             )
             if created:
                 self._create_resources_chart(metric, resource="probes")
