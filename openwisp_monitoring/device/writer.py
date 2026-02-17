@@ -288,21 +288,21 @@ class DeviceDataWriter(object):
         )
 
     def _write_probes(self, probes ,primary_key, content_type, current=False, time=None):
-        metric, created = Metric._get_or_create(
-            object_id=primary_key, content_type_id=content_type.id, configuration="probes"
-        )
-        if created:
-            self._create_resources_chart(metric, resource="probes")
-            # self._create_resources_alert_settings(metric, resource="test_probe")
         for probe in probes:
+            metric, created = Metric._get_or_create(
+                object_id=primary_key, content_type_id=content_type.id, configuration="probes"
+            )
+            # self._create_resources_alert_settings(metric, resource="test_probe")
             self._append_metric_data(
                 metric,
                 # this gives the name?
-                probe['ip'],
+                probe["timestamp"],
                 current,
                 time=time,
-                extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "device_timestamp": probe["timestamp"], "flood_flag": probe["flood_flag"], "interface": probe["interface"], "ip": probe["ip"]},
+                extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "ip": probe["ip"], "flood_flag": probe["flood_flag"], "interface": probe["interface"], "ip": probe["ip"]},
             )
+            if created:
+                self._create_resources_chart(metric, resource="probes")
 
     def _write_cpu(
         self, load, cpus, primary_key, content_type, current=False, time=None
