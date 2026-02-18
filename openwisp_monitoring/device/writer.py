@@ -290,16 +290,19 @@ class DeviceDataWriter(object):
     def _write_probes(self, probes ,primary_key, content_type, current=False, time=None):
         for probe in probes:
             metric, created = Metric._get_or_create(
-                object_id=primary_key, content_type_id=content_type.id, configuration="probes"
+                object_id=primary_key,
+                content_type_id=content_type.id,
+                configuration="probes",
+                name = f"{probe['ip']} probes",
+                main_tags={"ip": Metric._makekey(probe['ip'])},
             )
             # self._create_resources_alert_settings(metric, resource="test_probe")
             self._append_metric_data(
                 metric,
-                # this gives the name?
                 probe["rtt"],
                 current,
-                time=probe["timestamp"],
-                extra_values={"rtt":probe["rtt"], "mac": probe["mac"], "ip": probe["ip"], "flood_flag": probe["flood_flag"], "interface": probe["interface"]},
+                time = datetime.fromtimestamp(probes["device_timestamp"]),
+                extra_values={"mac": probe["mac"], "flood_flag": probe["flood_flag"], "interface": probe["interface"]},
             )
             if created:
                 self._create_resources_chart(metric, resource="probes")
