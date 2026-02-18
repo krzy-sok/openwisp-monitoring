@@ -301,7 +301,7 @@ class DeviceDataWriter(object):
                 metric,
                 probe["rtt"],
                 current,
-                time = datetime.fromtimestamp(int(probe["device_timestamp"])),
+                time = datetime.fromtimestamp(int(probe["timestamp"])),
                 extra_values={"mac": probe["mac"], "flood_flag": probe["flood_flag"], "interface": probe["interface"]},
             )
             if created:
