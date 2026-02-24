@@ -288,21 +288,24 @@ class DeviceDataWriter(object):
         )
 
     def _write_probes(self, probes ,primary_key, content_type, current=False, time=None):
-        for probe in probes:
+        for host in probes:
             metric, created = Metric._get_or_create(
                 object_id=primary_key,
                 content_type_id=content_type.id,
                 configuration="probes",
-                name = f"{probe['ip']} probes",
-                main_tags={"ip": Metric._makekey(probe['ip'])},
+                name = f"{host["ip"]} probes",
+                main_tags={"ip": Metric._makekey(host['ip'])},
             )
+            rtts = [probe["rtt"] for probe in host["probes"]]
+            avg = sum(rtts)/ len(rtts)
             # self._create_resources_alert_settings(metric, resource="test_probe")
             self._append_metric_data(
                 metric,
-                probe["rtt"],
+                avg,
                 current,
-                time = datetime.fromtimestamp(int(probe["timestamp"])),
-                extra_values={"mac": probe["mac"], "flood_flag": probe["flood_flag"], "interface": probe["interface"]},
+                time=time,
+                # time = datetime.fromtimestamp(int(probe["timestamp"])),
+                extra_values={"mac": host["mac"], "flood_flag": host["flood_flag"], "interface": host["interface"]},
             )
             if created:
                 self._create_resources_chart(metric, resource="probes")

@@ -31,9 +31,10 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
         "probes": {
             "label": "probes",
             "name": "probes",
-            "key": "anti_sniffer_probes",
+            # key == table name
+            "key": "rtt",
             "field_name": "probes",
-            "related_fields": ["mac" , "rtt", "device_timestamp", "flood_flag", "interface", "ip"],
+            "related_fields": ["mac", "device_timestamp", "flood_flag", "interface"],
             "charts": {
                 "probe_rtt_chart": {
                     "type": "bar",
