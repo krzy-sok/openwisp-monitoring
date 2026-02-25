@@ -206,3 +206,5 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
         assert(len(dd.writer.write_device_metrics) == 1)
         assert(dd.writer.write_device_metrics[0][0].name == '10.0.0.1 probes')
         assert(dd.writer.write_device_metrics[0][1]['value'] == 3.5)
+        read_extra = dd.writer.write_device_metrics[0][1]['extra_values']
+        assert(read_extra["rtt_median"] == 4)

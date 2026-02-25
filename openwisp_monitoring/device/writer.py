@@ -298,6 +298,8 @@ class DeviceDataWriter(object):
             )
             rtts = [probe["rtt"] for probe in host["probes"]]
             avg = sum(rtts)/ len(rtts)
+            rtts.sort()
+            median = rtts[len(rtts)/2]
             # self._create_resources_alert_settings(metric, resource="test_probe")
             self._append_metric_data(
                 metric,
@@ -305,7 +307,7 @@ class DeviceDataWriter(object):
                 current,
                 time=time,
                 # time = datetime.fromtimestamp(int(probe["timestamp"])),
-                extra_values={"mac": host["mac"], "flood_flag": host["flood_flag"], "interface": host["interface"]},
+                extra_values={"mac": host["mac"], "flood_flag": host["flood_flag"], "interface": host["interface"], "rtt_median": median},
             )
             if created:
                 self._create_resources_chart(metric, resource="probes")
