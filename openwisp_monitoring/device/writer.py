@@ -297,9 +297,14 @@ class DeviceDataWriter(object):
                 main_tags={"ip": Metric._makekey(host['ip'])},
             )
             rtts = [probe["rtt"] for probe in host["probes"]]
-            avg = sum(rtts)/ len(rtts)
-            rtts.sort()
-            median = rtts[int(len(rtts)/2)]
+            rtts_count = len(rtts)
+            if(rtts_count>0):
+                avg = sum(rtts)/ rtts_count
+                rtts.sort()
+                median = rtts[int(rtts_count/2)]
+            else:
+                avg = -1
+                median = -1
             # self._create_resources_alert_settings(metric, resource="test_probe")
             self._append_metric_data(
                 metric,

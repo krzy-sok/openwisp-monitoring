@@ -105,7 +105,7 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
                 "probes":[
                     {
                         "rtt": 1.23,
-                        "device_timestamp": 1771427134,
+                        "timestamp": 1771427134,
                     }
                 ],
             },
@@ -121,6 +121,31 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
         assert(read_extra['flood_flag'] == 0)
         assert(read_extra['interface'] == 'eth0')
 
+    def test_write_probe_no_data(self):
+        dd = self._create_device_data()
+        ct = ContentType.objects.get_for_model(load_model("config", "Device"))
+        time = datetime.now().replace(tzinfo=UTC)
+
+        probes_data = [
+            {
+                "ip" :"10.0.0.1" ,
+                "mac":"12-34-45-67-89-0A",
+                "flood_flag":0,
+                "interface":"eth0",
+                "probes":[
+                ],
+            },
+        ]
+        dd.writer.write_device_metrics = []
+        dd.writer._write_probes(probes_data, dd.pk, ct, time=time)
+
+        assert(len(dd.writer.write_device_metrics) == 1)
+        assert(dd.writer.write_device_metrics[0][0].name == '10.0.0.1 probes')
+        assert(dd.writer.write_device_metrics[0][1]['value'] == -1)
+        read_extra = dd.writer.write_device_metrics[0][1]['extra_values']
+        assert(read_extra['mac'] == "12-34-45-67-89-0A")
+        assert(read_extra['flood_flag'] == 0)
+        assert(read_extra['interface'] == 'eth0')
 
     def test_write_probe_data_multiple_hosts(self):
         dd = self._create_device_data()
@@ -136,7 +161,7 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
                 "probes":[
                     {
                         "rtt": 1.23,
-                        "device_timestamp": 1771427134,
+                        "timestamp": 1771427134,
                     }
                 ],
             },
@@ -148,7 +173,7 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
                 "probes" : [
                     {
                         "rtt": 1.23,
-                        "device_timestamp": 1771427134,
+                        "timestamp": 1771427134,
                     }
                 ]
             }
@@ -174,27 +199,27 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
                 "probes":[
                     {
                         "rtt": 1,
-                        "device_timestamp": 1771427134,
+                        "timestamp": 1771427134,
                     },
                     {
                         "rtt": 2,
-                        "device_timestamp": 1771427144,
+                        "timestamp": 1771427144,
                     },
                     {
                         "rtt": 3,
-                        "device_timestamp": 1771427154,
+                        "timestamp": 1771427154,
                     },
                     {
                         "rtt": 4,
-                        "device_timestamp": 1771427164,
+                        "timestamp": 1771427164,
                     },
                     {
                         "rtt": 5,
-                        "device_timestamp": 1771427174,
+                        "timestamp": 1771427174,
                     },
                     {
                         "rtt": 6,
-                        "device_timestamp": 1771427184,
+                        "timestamp": 1771427184,
                     }
 
                 ],
