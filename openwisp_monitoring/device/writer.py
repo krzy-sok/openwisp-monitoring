@@ -299,7 +299,7 @@ class DeviceDataWriter(object):
             rtts = [probe["rtt"] for probe in host["probes"]]
             avg = sum(rtts)/ len(rtts)
             rtts.sort()
-            median = rtts[len(rtts)/2]
+            median = rtts[int(len(rtts)/2)]
             # self._create_resources_alert_settings(metric, resource="test_probe")
             self._append_metric_data(
                 metric,
