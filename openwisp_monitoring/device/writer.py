@@ -153,8 +153,6 @@ class DeviceDataWriter(object):
                     current,
                     time=time,
                 )
-        if "test_probe" in data:
-            self._write_test_probe(data["test_probe"]["test_field"], data["test_probe"]["some_field"], self.device_data.pk, ct, time=time)
         if "probes" in data:
             self._write_probes(data["probes"], self.device_data.pk, ct, time=time)
         try:
@@ -270,23 +268,6 @@ class DeviceDataWriter(object):
         if created:
             self._create_access_tech_chart(metric)
 
-    def _write_test_probe(self, test_field, some_field, primary_key, content_type, current=False, time=None):
-        metric, created = Metric._get_or_create(
-            object_id=primary_key, content_type_id=content_type.id, configuration="test_probe"
-        )
-        if created:
-            self._create_resources_chart(metric, resource="test_probe")
-            # self._create_resources_alert_settings(metric, resource="test_probe")
-        self._append_metric_data(
-            metric,
-            # only this got written
-            test_field,
-            current,
-            time=time,
-            # extras got ignored
-            extra_values={"some_field":some_field},
-        )
-
     def _write_probes(self, probes ,primary_key, content_type, current=False, time=None):
         for host in probes:
             metric, created = Metric._get_or_create(
@@ -296,15 +277,19 @@ class DeviceDataWriter(object):
                 name = f"{host["ip"]} probes",
                 main_tags={"ip": Metric._makekey(host['ip'])},
             )
-            rtts = [probe["rtt"] for probe in host["probes"]]
-            rtts_count = len(rtts)
+
+            rtts_count = len(host["probes"])
+
+            rtts = []
+            avg = -1
+            median = -1
+
             if(rtts_count>0):
+                rtts = [probe["rtt"] for probe in host["probes"]]
                 avg = sum(rtts)/ rtts_count
                 rtts.sort()
                 median = rtts[int(rtts_count/2)]
-            else:
-                avg = -1
-                median = -1
+
             # self._create_resources_alert_settings(metric, resource="test_probe")
             self._append_metric_data(
                 metric,
@@ -312,7 +297,13 @@ class DeviceDataWriter(object):
                 current,
                 time=time,
                 # time = datetime.fromtimestamp(int(probe["timestamp"])),
-                extra_values={"mac": host["mac"], "flood_flag": host["flood_flag"], "interface": host["interface"], "rtt_median": median},
+                extra_values={
+                    "mac": host["mac"],
+                    "flood_flag": host["flood_flag"],
+                    "interface": host["interface"],
+                    "rtt_median": median,
+                    "individual_probes": ", ".join(str(rtt) for rtt in rtts)
+                },
             )
             if created:
                 self._create_resources_chart(metric, resource="probes")

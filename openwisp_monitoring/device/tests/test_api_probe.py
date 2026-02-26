@@ -20,32 +20,34 @@ class TestDeviceApiProbe(AuthenticationMixin, TestGeoMixin, DeviceMonitoringTest
     # Exclude general charts from the query
     chart_queryset = Chart.objects.exclude(metric__object_id=None)
 
-    # TODO: move to mixin
-    def _get_test_probe_data(self):
-        return {
-            "type": "DeviceMonitoring",
-            "test_probe":{
-                "test_field":"2137",
-                "some_field": "test"
-                }
-            }
+    def _get_probe_data(self):
+        return {"type": "DeviceMonitoring", "probes":[{
+                "ip" :"10.0.0.1" ,
+                "mac":"12-34-45-67-89-0A",
+                "flood_flag":0,
+                "interface":"eth0",
+                "probes":[
+                    {
+                        "rtt": 1.23,
+                        "timestamp": 1771427134,
+                    }
+                ]
+            }]}
 
     def _create_device_data(self, **kwargs):
         d = self._create_device(**kwargs)
         return DeviceData(pk=d.pk)
 
-    # def test_sanity_check(self):
-    #     self.assertTrue(False)
 
     def test_api_200(self):
         o = self._create_org()
         d = self._create_device(organization=o)
-        data = self._get_test_probe_data()
-        with self.assertNumQueries(3):
+        data = self._get_probe_data()
+        with self.assertNumQueries(9):
             r = self._post_data(d.id, d.key, data)
         self.assertEqual(r.status_code, 200)
         # Add 1 for general metric and chart
-        self.assertEqual(self.metric_queryset.count(), 0)
+        self.assertEqual(self.metric_queryset.count(), 1)
         self.assertEqual(self.chart_queryset.count(), 0)
 
         d.delete(check_deactivated=False)
@@ -54,11 +56,11 @@ class TestDeviceApiProbe(AuthenticationMixin, TestGeoMixin, DeviceMonitoringTest
 
     def test_save_data(self):
         dd = self._create_device_data()
-        dd.data = deepcopy(self._get_test_probe_data())
+        dd.data = deepcopy(self._get_probe_data())
         dd.save_data()
         return dd
 
     def test_read_data(self):
         dd = self.test_save_data()
         dd = DeviceData(pk=dd.pk)
-        self.assertEqual(dd.data, self._get_test_probe_data())
+        self.assertEqual(dd.data, self._get_probe_data())

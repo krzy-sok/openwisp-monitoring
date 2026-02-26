@@ -6,35 +6,13 @@ from openwisp_monitoring.db import chart_query
 ADDITIONAL_CHARTS = get_settings_value("CHARTS", {})
 ADDITIONAL_METRICS = get_settings_value("METRICS",
     {
-        "test_probe": {
-            "label": "test_probe",
-            "name": "test_probe",
-            "key": "test_field",
-            "field_name": "test_field",
-            "related_fields": ["some_field"],
-            "charts": {
-                "test_probe_chart": {
-                    "type": "bar",
-                    "title": _("Sample chart"),
-                    "description": _(
-                        "test probe chart"
-                    ),
-                    "summary_labels": [_("Sample chart")],
-                    "unit": "num",
-                    "order": 200,
-                    "query": {
-                        "influxdb":("SELECT test_field from test_field")
-                    }
-                }
-            }
-        },
         "probes": {
             "label": "probes",
             "name": "probes",
             # key == table name
             "key": "probes",
             "field_name": "rtt_avg",
-            "related_fields": ["mac", "device_timestamp", "flood_flag", "interface", "rtt_median"],
+            "related_fields": ["mac", "device_timestamp", "flood_flag", "interface", "rtt_median", "individual_probes"],
             "charts": {
                 "probe_rtt_chart": {
                     "type": "bar",
