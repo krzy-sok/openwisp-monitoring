@@ -120,6 +120,7 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
         assert(read_extra['mac'] == "12-34-45-67-89-0A")
         assert(read_extra['flood_flag'] == 0)
         assert(read_extra['interface'] == 'eth0')
+        assert(read_extra["individual_probes"] == "1.23")
 
     def test_write_probe_no_data(self):
         dd = self._create_device_data()
@@ -146,6 +147,7 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
         assert(read_extra['mac'] == "12-34-45-67-89-0A")
         assert(read_extra['flood_flag'] == 0)
         assert(read_extra['interface'] == 'eth0')
+        assert(read_extra["individual_probes"] == "")
 
     def test_write_probe_data_multiple_hosts(self):
         dd = self._create_device_data()
@@ -233,3 +235,4 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
         assert(dd.writer.write_device_metrics[0][1]['value'] == 3.5)
         read_extra = dd.writer.write_device_metrics[0][1]['extra_values']
         assert(read_extra["rtt_median"] == 4)
+        assert(read_extra["individual_probes"] == "1, 2, 3, 4, 5, 6")
