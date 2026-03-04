@@ -281,8 +281,8 @@ class DeviceDataWriter(object):
             rtts_count = len(host["probes"])
 
             rtts = []
-            avg = -1
-            median = -1
+            avg = -1.0
+            median = -1.0
 
             if(rtts_count>0):
                 rtts = [probe["rtt"] for probe in host["probes"]]
