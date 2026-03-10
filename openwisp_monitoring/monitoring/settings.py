@@ -28,6 +28,29 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
                     }
                 }
             }
+        },
+        "sniffer_prediction": {
+            "label": "sniffer_prediction",
+            "name": "sniffer_prediction",
+            # key == table name
+            "key": "sniffer_prediction",
+            "field_name": "probability",
+            "related_fields": [],
+            # "charts": {
+            #     "sniffer_probability_chart": {
+            #         "type": "line",
+            #         "title": _("Sniffer probability chart"),
+            #         "description": _(
+            #             "Probability of sniffer running ona host"
+            #         ),
+            #         "summary_labels": [_("Sample chart")],
+            #         "unit": "num",
+            #         "order": 200,
+            #         "query": {
+            #             "influxdb":("SELECT rtt from test_field")
+            #         }
+            #     }
+            # }
         }
     }
 )
