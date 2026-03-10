@@ -29,11 +29,11 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
                 }
             }
         },
-        "sniffer_prediction": {
-            "label": "sniffer_prediction",
-            "name": "sniffer_prediction",
+        "sniffer_proba": {
+            "label": "sniffer_proba",
+            "name": "sniffer_proba",
             # key == table name
-            "key": "sniffer_prediction",
+            "key": "sniffer_proba",
             "field_name": "probability",
             "related_fields": [],
             # "charts": {
