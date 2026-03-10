@@ -9,7 +9,7 @@ from swapper import load_model
 
 from .. import settings as monitoring_settings
 from ..monitoring.configuration import ACCESS_TECHNOLOGIES
-from antisniff_classifier_iterface import get_prediction
+from .antisniff_classifier_iterface import get_prediction
 
 Chart = load_model("monitoring", "Chart")
 Metric = load_model("monitoring", "Metric")
@@ -306,7 +306,7 @@ class DeviceDataWriter(object):
                     "individual_probes": ", ".join(str(rtt) for rtt in rtts)
                 },
             )
-            self._write_antisniff_prediction(host['ip'], avg, median, primary_key, content_type, current, time)
+            # self._write_antisniff_prediction(host['ip'], avg, median, primary_key, content_type, current, time)
             if created:
                 self._create_resources_chart(metric, resource="probes")
 
@@ -314,7 +314,7 @@ class DeviceDataWriter(object):
         metric, created = Metric._get_or_create(
             object_id=primary_key,
             content_type_id=content_type.id,
-            configuration="sniffer_prediction",
+            configuration="sniffer_proba",
             name = f"{"ip"} predictions",
             main_tags={"ip": Metric._makekey('ip')},
         )
