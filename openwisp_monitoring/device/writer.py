@@ -306,7 +306,7 @@ class DeviceDataWriter(object):
                     "individual_probes": ", ".join(str(rtt) for rtt in rtts)
                 },
             )
-            # self._write_antisniff_prediction(host['ip'], avg, median, primary_key, content_type, current, time)
+            self._write_antisniff_prediction(host['ip'], avg, median, primary_key, content_type, current, time)
             if created:
                 self._create_resources_chart(metric, resource="probes")
 
