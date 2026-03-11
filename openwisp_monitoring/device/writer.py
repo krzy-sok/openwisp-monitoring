@@ -315,8 +315,8 @@ class DeviceDataWriter(object):
             object_id=primary_key,
             content_type_id=content_type.id,
             configuration="sniffer_proba",
-            name = f"{"ip"} predictions",
-            main_tags={"ip": Metric._makekey('ip')},
+            name = f"{ip} predictions",
+            main_tags={"ip": Metric._makekey(ip)},
         )
         prediction = get_prediction(primary_key, ip, avg, median)
         self._append_metric_data(

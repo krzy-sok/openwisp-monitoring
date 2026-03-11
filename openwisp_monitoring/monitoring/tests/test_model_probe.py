@@ -113,7 +113,8 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
         dd.writer.write_device_metrics = []
         dd.writer._write_probes(probes_data, dd.pk, ct, time=time)
 
-        assert(len(dd.writer.write_device_metrics) == 1)
+        # + 1 from sniffer probability
+        assert(len(dd.writer.write_device_metrics) == 2)
         assert(dd.writer.write_device_metrics[0][0].name == '10.0.0.1 probes')
         assert(dd.writer.write_device_metrics[0][1]['value'] == 1.23)
         read_extra = dd.writer.write_device_metrics[0][1]['extra_values']
@@ -140,7 +141,7 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
         dd.writer.write_device_metrics = []
         dd.writer._write_probes(probes_data, dd.pk, ct, time=time)
 
-        assert(len(dd.writer.write_device_metrics) == 1)
+        assert(len(dd.writer.write_device_metrics) == 2)
         assert(dd.writer.write_device_metrics[0][0].name == '10.0.0.1 probes')
         assert(dd.writer.write_device_metrics[0][1]['value'] == -1)
         read_extra = dd.writer.write_device_metrics[0][1]['extra_values']
@@ -182,9 +183,11 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
         ]
         dd.writer.write_device_metrics = []
         dd.writer._write_probes(probes_data, dd.pk, ct, time=time)
-        assert(len(dd.writer.write_device_metrics) == 2)
+        assert(len(dd.writer.write_device_metrics) == 4)
         assert(dd.writer.write_device_metrics[0][0].name == '10.0.0.1 probes')
-        assert(dd.writer.write_device_metrics[1][0].name == '10.0.0.2 probes')
+        assert(dd.writer.write_device_metrics[1][0].name == '10.0.0.1 predictions')
+        assert(dd.writer.write_device_metrics[2][0].name == '10.0.0.2 probes')
+        assert(dd.writer.write_device_metrics[3][0].name == '10.0.0.2 predictions')
 
 
     def test_write_probe_data_multiple_probes(self):
@@ -230,7 +233,7 @@ class TestProbeDeviceData(TestDeviceMonitoringMixin, TestCase):
         dd.writer.write_device_metrics = []
         dd.writer._write_probes(probes_data, dd.pk, ct, time=time)
 
-        assert(len(dd.writer.write_device_metrics) == 1)
+        assert(len(dd.writer.write_device_metrics) == 2)
         assert(dd.writer.write_device_metrics[0][0].name == '10.0.0.1 probes')
         assert(dd.writer.write_device_metrics[0][1]['value'] == 3.5)
         read_extra = dd.writer.write_device_metrics[0][1]['extra_values']
