@@ -37,7 +37,7 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
             "field_name": "probability",
             "related_fields": [],
             "charts": {
-                "sniffer_probability_chart": {
+                "sniffer_chart": {
                     "type": "line",
                     "title": _("Sniffer probability chart"),
                     "description": _(
