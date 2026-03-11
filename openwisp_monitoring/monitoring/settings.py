@@ -24,7 +24,7 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
                     "unit": "num",
                     "order": 200,
                     "query": {
-                        "influxdb":("SELECT rtt from test_field")
+                        "influxdb":("SELECT avg from probes WHERE ip='{ip}' and time>='{time}' and object_id = '{object_id}'")
                     }
                 }
             }
@@ -36,21 +36,21 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
             "key": "sniffer_proba",
             "field_name": "probability",
             "related_fields": [],
-            # "charts": {
-            #     "sniffer_probability_chart": {
-            #         "type": "line",
-            #         "title": _("Sniffer probability chart"),
-            #         "description": _(
-            #             "Probability of sniffer running ona host"
-            #         ),
-            #         "summary_labels": [_("Sample chart")],
-            #         "unit": "num",
-            #         "order": 200,
-            #         "query": {
-            #             "influxdb":("SELECT rtt from test_field")
-            #         }
-            #     }
-            # }
+            "charts": {
+                "sniffer_probability_chart": {
+                    "type": "line",
+                    "title": _("Sniffer probability chart"),
+                    "description": _(
+                        "Probability of sniffer running ona host"
+                    ),
+                    "summary_labels": [_("Sample chart")],
+                    "unit": "num",
+                    "order": 200,
+                    "query": {
+                        "influxdb":("SELECT probability from sniffer_proba WHERE ip='{ip}' and time>='{time}' and object_id = '{object_id}'")
+                    }
+                }
+            }
         }
     }
 )
