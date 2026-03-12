@@ -308,7 +308,7 @@ class DeviceDataWriter(object):
             )
             self._write_antisniff_prediction(host['ip'], avg, median, primary_key, content_type, current, time)
             if created:
-                self._create_resources_chart(metric, resource="probes")
+                self._create_resources_chart(metric, resource="probe_rtt_chart")
 
     def _write_antisniff_prediction(self, ip, avg, median, primary_key, content_type, current=False, time=None):
         metric, created = Metric._get_or_create(
@@ -325,6 +325,8 @@ class DeviceDataWriter(object):
             current,
             time=time,
         )
+        if created:
+            self._create_resources_chart(metric, resource="sniffer_chart")
 
     def _write_cpu(
         self, load, cpus, primary_key, content_type, current=False, time=None

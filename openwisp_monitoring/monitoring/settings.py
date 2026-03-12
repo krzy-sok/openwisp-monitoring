@@ -21,7 +21,7 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
                         "example chart"
                     ),
                     "summary_labels": [_("Sample chart")],
-                    "unit": "ms",
+                    "unit": "",
                     "order": 200,
                     "query": {
                         "influxdb":("SELECT avg from probes WHERE ip='{ip}' and time>='{time}' and object_id='{object_id}'")
@@ -44,7 +44,7 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
                         "Probability of sniffer running on a host"
                     ),
                     "summary_labels": [_("Sample chart")],
-                    "unit": "%",
+                    "unit": "",
                     "order": 200,
                     "query": {
                         "influxdb":("SELECT probability from sniffer_proba WHERE ip='{ip}' and time>='{time}' and object_id = '{object_id}'")

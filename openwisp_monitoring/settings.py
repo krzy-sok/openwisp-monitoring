@@ -16,6 +16,8 @@ AUTO_CHARTS = get_settings_value(
         "memory",
         "cpu",
         "disk",
+        "sniffer_chart",
+        "probe_rtt_chart",
     ),
 )
 
