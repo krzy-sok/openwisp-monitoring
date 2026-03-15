@@ -14,17 +14,30 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
             "field_name": "rtt_avg",
             "related_fields": ["mac", "device_timestamp", "flood_flag", "interface", "rtt_median", "individual_probes"],
             "charts": {
-                "probe_rtt_chart": {
+                "probe_avg_chart": {
                     "type": "bar",
-                    "title": _("Probe rtt chart"),
+                    "title": _("Probe avg rtt chart for {ip}"),
                     "description": _(
-                        "example chart"
+                        "average rtt of probes sent to host {ip}"
                     ),
                     "summary_labels": [_("Sample chart")],
                     "unit": "",
                     "order": 200,
                     "query": {
                         "influxdb":("SELECT rtt_avg FROM probes WHERE ip = '{ip}' and time >= '{time}' and object_id = '{object_id}'")
+                    }
+                },
+                "probe_med_chart": {
+                    "type": "bar",
+                    "title": _("Probe median rtt chart for {ip}"),
+                    "description": _(
+                        "median rtt of probes sent to host {ip}"
+                    ),
+                    "summary_labels": [_("Sample chart")],
+                    "unit": "",
+                    "order": 200,
+                    "query": {
+                        "influxdb":("SELECT rtt_median FROM probes WHERE ip = '{ip}' and time >= '{time}' and object_id = '{object_id}'")
                     }
                 }
             }
@@ -39,9 +52,9 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
             "charts": {
                 "sniffer_chart": {
                     "type": "line",
-                    "title": _("Sniffer probability chart"),
+                    "title": _("Sniffer probability chart for {ip}"),
                     "description": _(
-                        "Probability of sniffer running on a host"
+                        "Probability of sniffer running on a host {ip}"
                     ),
                     "summary_labels": [_("Sample chart")],
                     "unit": "",
