@@ -306,11 +306,11 @@ class DeviceDataWriter(object):
                     "individual_probes": ", ".join(str(rtt) for rtt in rtts)
                 },
             )
-            self._write_antisniff_prediction(host['ip'], avg, median, primary_key, content_type, current, time)
+            self._write_antisniff_prediction(host['ip'], avg, median, host["flood_flag"], primary_key, content_type, current, time)
             if created:
                 self._create_resources_chart(metric, resource="probe_avg_chart")
 
-    def _write_antisniff_prediction(self, ip, avg, median, primary_key, content_type, current=False, time=None):
+    def _write_antisniff_prediction(self, ip, avg, median, flood_flag, primary_key, content_type, current=False, time=None):
         metric, created = Metric._get_or_create(
             object_id=primary_key,
             content_type_id=content_type.id,
@@ -318,7 +318,7 @@ class DeviceDataWriter(object):
             name = f"{ip} predictions",
             main_tags={"ip": Metric._makekey(ip)},
         )
-        prediction = get_prediction(primary_key, ip, avg, median)
+        prediction = get_prediction(primary_key, ip, avg, median, flood_flag)
         self._append_metric_data(
             metric,
             prediction,
