@@ -286,7 +286,7 @@ class DeviceDataWriter(object):
             median = -1.0
 
             if(rtts_count>0):
-                rtts = [probe["rtt"] for probe in host["probes"]]
+                rtts = [probe["rtt"] for probe in host["probes"] if probe["rtt"]>0]
                 avg = sum(rtts)/ rtts_count
                 rtts.sort()
                 median = float(rtts[int(rtts_count/2)])
@@ -306,8 +306,9 @@ class DeviceDataWriter(object):
                     "individual_probes": ", ".join(str(rtt) for rtt in rtts)
                 },
             )
-            self._write_antisniff_prediction(host['ip'], avg, median, host["flood_flag"], primary_key, content_type, current, time)
+            self._write_antisniff_prediction(host['ip'], avg, median, host["flood_flag"], primary_key, content_type, current, time=time)
             if created:
+                self._create_resources_alert_settings(metric, resource="")
                 self._create_resources_chart(metric, resource="probe_avg_chart")
 
     def _write_antisniff_prediction(self, ip, avg, median, flood_flag, primary_key, content_type, current=False, time=None):
@@ -326,6 +327,7 @@ class DeviceDataWriter(object):
             time=time,
         )
         if created:
+            self._create_resources_alert_settings(metric, resource="")
             self._create_resources_chart(metric, resource="sniffer_chart")
 
     def _write_cpu(

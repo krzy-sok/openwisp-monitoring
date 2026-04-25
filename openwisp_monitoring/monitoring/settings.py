@@ -63,6 +63,20 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
                         "influxdb":("SELECT probability FROM sniffer_proba WHERE ip = '{ip}' and time >= '{time}' and object_id = '{object_id}'")
                     }
                 }
+            },
+            "notification":{
+                "problem": {
+                    "verbose_name": "Possible sniffing activity",
+                    "verb": _("host {ip} is likely to be running a sniffer"),
+                    "level": "warning",
+                    "email_subject": _(
+                        "[{site.name}] PROBLEM: {notification.target} {notification.verb}"
+                    ),
+                    "message": _(
+                        "The device [{notification.target}]({notification.target_link}) "
+                        "{notification.verb}."
+                    ),
+                },
             }
         }
     }
