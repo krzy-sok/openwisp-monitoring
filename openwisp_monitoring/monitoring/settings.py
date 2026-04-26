@@ -67,25 +67,25 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
             "notification":{
                 "problem": {
                     "verbose_name": "Anti-sniffer PROBLEM",
-                    "verb": _("host {ip} is likely to be running a sniffer"),
+                    "verb": _("The device has detected a high risk of a sniffing host"),
                     "level": "warning",
                     "email_subject": _(
                         "[{site.name}] PROBLEM: {notification.target} {notification.verb}"
                     ),
                     "message": _(
-                        "The device [{notification.target}]({notification.target_link}) "
+                        "[{notification.target}]({notification.target_link}) "
                         "{notification.verb}."
                     ),
                 },
                 "recovery": {
                     "verbose_name": "Anti-sniffer RECOVERY",
-                    "verb": _("host {ip} has returned to normal sniffer risk"),
+                    "verb": _("One of connected hosts no longer displays signs of sniffing"),
                     "level": "info",
                     "email_subject": _(
                         "[{site.name}] RECOVERY: {notification.target} {notification.verb}"
                     ),
                     "message": _(
-                        "The device [{notification.target}]({notification.target_link}) "
+                        "[{notification.target}]({notification.target_link}) "
                         "{notification.verb}."
                     ),
                 }
