@@ -12,7 +12,7 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
             # key == table name
             "key": "probes",
             "field_name": "rtt_avg",
-            "related_fields": ["mac", "device_timestamp", "flood_flag", "interface", "rtt_median", "individual_probes"],
+            "related_fields": ["mac", "device_timestamp", "flood_flag", "interface", "rtt_median", "individual_probes", "max_diff"],
             "charts": {
                 "probe_avg_chart": {
                     "type": "bar",

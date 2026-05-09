@@ -39,5 +39,5 @@ class TestPredictDeviceData(TestDeviceMonitoringMixin, TestCase):
 
     def test_get_prediction_inaccessible(self):
         dd = self._create_device_data()
-        res = get_prediction(dd.pk, "10.0.0.1", 0.5, 0.5)
+        res = get_prediction(dd.pk, "10.0.0.1", 0.5, 0.5, 1, 0.5)
         assert(res == -1.0)

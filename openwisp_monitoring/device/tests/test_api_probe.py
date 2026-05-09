@@ -47,7 +47,7 @@ class TestDeviceApiProbe(AuthenticationMixin, TestGeoMixin, DeviceMonitoringTest
         self.assertEqual(r.status_code, 200)
         # Add 1 for general metric and chart
         self.assertEqual(self.metric_queryset.count(), 2)
-        self.assertEqual(self.chart_queryset.count(), 0)
+        self.assertEqual(self.chart_queryset.count(), 1)
 
         d.delete(check_deactivated=False)
         r = self._post_data(d.id, d.key, data)

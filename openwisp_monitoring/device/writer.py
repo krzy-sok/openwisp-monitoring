@@ -284,12 +284,15 @@ class DeviceDataWriter(object):
             rtts = []
             avg = -1.0
             median = -1.0
+            max_diff = 0
 
             if(rtts_count>0):
                 rtts = [probe["rtt"] for probe in host["probes"] if probe["rtt"]>0]
                 avg = sum(rtts)/ rtts_count
                 rtts.sort()
                 median = float(rtts[int(rtts_count/2)])
+                max_diff = rtts[-1] - rtts[0]
+
 
             # self._create_resources_alert_settings(metric, resource="test_probe")
             self._append_metric_data(
@@ -303,15 +306,16 @@ class DeviceDataWriter(object):
                     "flood_flag": host["flood_flag"],
                     "interface": host["interface"],
                     "rtt_median": median,
-                    "individual_probes": ", ".join(str(rtt) for rtt in rtts)
+                    "individual_probes": ", ".join(str(rtt) for rtt in rtts),
+                    "max_diff": max_diff
                 },
             )
-            self._write_antisniff_prediction(host['ip'], avg, median, host["flood_flag"], primary_key, content_type, current, time=time)
+            self._write_antisniff_prediction(host['ip'], avg, median, host["flood_flag"], max_diff , primary_key, content_type, current, time=time)
             if created:
                 self._create_resources_alert_settings(metric, resource="")
                 self._create_resources_chart(metric, resource="probe_avg_chart")
 
-    def _write_antisniff_prediction(self, ip, avg, median, flood_flag, primary_key, content_type, current=False, time=None):
+    def _write_antisniff_prediction(self, ip, avg, median, flood_flag,max_diff, primary_key, content_type, current=False, time=None):
         metric, created = Metric._get_or_create(
             object_id=primary_key,
             content_type_id=content_type.id,
@@ -319,7 +323,7 @@ class DeviceDataWriter(object):
             name = f"{ip} predictions",
             main_tags={"ip": Metric._makekey(ip)},
         )
-        prediction = get_prediction(primary_key, ip, avg, median, flood_flag)
+        prediction = get_prediction(primary_key, ip, avg, median, flood_flag, max_diff)
         self._append_metric_data(
             metric,
             prediction,
