@@ -284,7 +284,7 @@ class DeviceDataWriter(object):
             rtts = []
             avg = -1.0
             median = -1.0
-            max_diff = 0
+            max_diff = 0.0
 
             if(rtts_count>0):
                 rtts = [probe["rtt"] for probe in host["probes"] if probe["rtt"]>0]
