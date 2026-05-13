@@ -48,7 +48,7 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
             # key == table name
             "key": "sniffer_proba",
             "field_name": "probability",
-            "related_fields": [],
+            "related_fields": ["computer_type"],
             "charts": {
                 "sniffer_chart": {
                     "type": "line",
@@ -60,7 +60,14 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
                     "unit": "",
                     "order": 200,
                     "query": {
-                        "influxdb":("SELECT probability FROM sniffer_proba WHERE ip = '{ip}' and time >= '{time}' and object_id = '{object_id}'")
+                        "influxdb":(
+                            """SELECT probability FROM sniffer_proba
+                            WHERE ip = '{ip}'
+                            and time >= '{time}'
+                            and object_id = '{object_id}'
+                            AND object_id = '{object_id}'
+                            GROUP BY time(5m)"""
+                        )
                     }
                 }
             },

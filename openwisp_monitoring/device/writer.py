@@ -323,12 +323,15 @@ class DeviceDataWriter(object):
             name = f"{ip} predictions",
             main_tags={"ip": Metric._makekey(ip)},
         )
-        prediction = get_prediction(primary_key, ip, avg, median, flood_flag, max_diff)
+        prediction,computer_type = get_prediction(primary_key, ip, avg, median, flood_flag, max_diff)
         self._append_metric_data(
             metric,
             prediction,
             current,
             time=time,
+            extra_values={
+                "computer_type": computer_type
+            }
         )
         if created:
             self._create_resources_alert_settings(metric, resource="")
