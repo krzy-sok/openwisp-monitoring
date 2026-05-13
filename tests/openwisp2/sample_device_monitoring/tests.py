@@ -25,6 +25,9 @@ from openwisp_monitoring.device.tests.test_settings import (
 from openwisp_monitoring.device.tests.test_transactions import (
     TestTransactions as BaseTestTransactions,
 )
+from openwisp_monitoring.device.tests.test_api_probe import (
+    TestDeviceApiProbe as BaseTestDeviceApiProbe
+)
 
 
 class TestRecovery(BaseTestRecovery):
@@ -70,6 +73,9 @@ class TestWifiClientSession(BaseTestWifiClientSession):
 class TestWifiSessionAdmin(BaseTestWifiSessionAdmin):
     pass
 
+class TestProbeApi(BaseTestDeviceApiProbe):
+    pass
+
 
 # this is necessary to avoid excuting the base test suites
 del BaseTestRecovery
@@ -83,3 +89,5 @@ del BaseTestAdmin
 del BaseTestApps
 del BaseTestWifiClientSession
 del BaseTestWifiSessionAdmin
+
+del BaseTestDeviceApiProbe

@@ -9,6 +9,7 @@ from swapper import load_model
 
 from .. import settings as monitoring_settings
 from ..monitoring.configuration import ACCESS_TECHNOLOGIES
+from .antisniff_classifier_iterface import get_prediction
 
 Chart = load_model("monitoring", "Chart")
 Metric = load_model("monitoring", "Metric")
@@ -153,6 +154,8 @@ class DeviceDataWriter(object):
                     current,
                     time=time,
                 )
+        if "probes" in data:
+            self._write_probes(data["probes"], self.device_data.pk, ct, time=time)
         try:
             Metric.batch_write(self.write_device_metrics)
         except ValueError as error:
@@ -265,6 +268,74 @@ class DeviceDataWriter(object):
         )
         if created:
             self._create_access_tech_chart(metric)
+
+    def _write_probes(self, probes ,primary_key, content_type, current=False, time=None):
+        for host in probes:
+            metric, created = Metric._get_or_create(
+                object_id=primary_key,
+                content_type_id=content_type.id,
+                configuration="probes",
+                name = f"{host["ip"]} probes",
+                main_tags={"ip": Metric._makekey(host['ip'])},
+            )
+
+            rtts_count = len(host["probes"])
+
+            rtts = []
+            avg = -1.0
+            median = -1.0
+            max_diff = 0.0
+
+            if(rtts_count>0):
+                rtts = [probe["rtt"] for probe in host["probes"] if probe["rtt"]>0]
+                avg = sum(rtts)/ rtts_count
+                rtts.sort()
+                median = float(rtts[int(rtts_count/2)])
+                max_diff = rtts[-1] - rtts[0]
+
+
+            # self._create_resources_alert_settings(metric, resource="test_probe")
+            self._append_metric_data(
+                metric,
+                avg,
+                current,
+                time=time,
+                # time = datetime.fromtimestamp(int(probe["timestamp"])),
+                extra_values={
+                    "mac": host["mac"],
+                    "flood_flag": host["flood_flag"],
+                    "interface": host["interface"],
+                    "rtt_median": median,
+                    "individual_probes": ", ".join(str(rtt) for rtt in rtts),
+                    "max_diff": max_diff
+                },
+            )
+            self._write_antisniff_prediction(host['ip'], avg, median, host["flood_flag"], max_diff , primary_key, content_type, current, time=time)
+            if created:
+                self._create_resources_alert_settings(metric, resource="")
+                self._create_resources_chart(metric, resource="probe_avg_chart")
+
+    def _write_antisniff_prediction(self, ip, avg, median, flood_flag,max_diff, primary_key, content_type, current=False, time=None):
+        metric, created = Metric._get_or_create(
+            object_id=primary_key,
+            content_type_id=content_type.id,
+            configuration="sniffer_proba",
+            name = f"{ip} predictions",
+            main_tags={"ip": Metric._makekey(ip)},
+        )
+        prediction,computer_type = get_prediction(primary_key, ip, avg, median, flood_flag, max_diff)
+        self._append_metric_data(
+            metric,
+            prediction,
+            current,
+            time=time,
+            extra_values={
+                "computer_type": computer_type
+            }
+        )
+        if created:
+            self._create_resources_alert_settings(metric, resource="")
+            self._create_resources_chart(metric, resource="sniffer_chart")
 
     def _write_cpu(
         self, load, cpus, primary_key, content_type, current=False, time=None

@@ -73,3 +73,6 @@ local_settings.py
 *.tar.gz
 Pipfile
 Pipfile.lock
+
+
+.venv
