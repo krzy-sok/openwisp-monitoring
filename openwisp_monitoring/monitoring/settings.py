@@ -67,7 +67,7 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
                             "AND object_id = '{object_id}' "+
                             "AND object_id = '{object_id}' "+
                             "GROUP BY time(5m) "+
-                            "fill(none);"
+                            "fill(none)"
                         )
                     }
                 }
