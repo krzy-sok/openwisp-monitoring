@@ -61,13 +61,13 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
                     "order": 200,
                     "query": {
                         "influxdb":(
-                            "SELECT probability FROM sniffer_proba "+
+                            "SELECT mean(probability) as probability FROM sniffer_proba "+
                             "WHERE ip = '{ip}' "+
                             "AND time >= '{time}' "+
                             "AND object_id = '{object_id}' "+
                             "AND object_id = '{object_id}' "+
                             "GROUP BY time(5m) "+
-                            "fill(none)"
+                            "fill(null)"
                         )
                     }
                 }
