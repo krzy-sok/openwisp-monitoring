@@ -1,7 +1,7 @@
 import requests
 
 def get_prediction(device_id, host_ip, avg, median, flood_flag, max_diff):
-    try:
+    # try:
         res = requests.post(
             "http://antisniff:8001/predict",
             json={
@@ -15,6 +15,6 @@ def get_prediction(device_id, host_ip, avg, median, flood_flag, max_diff):
         data = res.json()
         return (data["sniffing"], data['computer_type'])
         # return float(res.text)
-    except Exception as ex:
-        print(ex)
-        return (-0.1, "exception")
+    # except Exception as ex:
+    #     # return (-0.1, "exception")
+    #     raise(ex)
