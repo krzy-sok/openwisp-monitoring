@@ -15,5 +15,6 @@ def get_prediction(device_id, host_ip, avg, median, flood_flag, max_diff):
         data = res.json()
         return (data["sniffing"], data['computer_type'])
         # return float(res.text)
-    except Exception:
-        return (-1.0, "unknown")
+    except Exception as ex:
+        print(ex)
+        return (-0.1, "exception")
