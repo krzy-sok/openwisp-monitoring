@@ -9,7 +9,7 @@ def get_prediction(device_id, host_ip, avg, median, flood_flag, max_diff):
                 "rtt_median": median,
                 "flood_flag": flood_flag,
                 "max_diff": max_diff,
-                "device": device_id,
+                "device": str(device_id),
                 "ip": host_ip
             })
         data = res.json()
