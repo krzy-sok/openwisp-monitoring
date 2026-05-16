@@ -525,7 +525,7 @@ class AbstractChart(TimeStampedEditableModel):
             else get_chart_configuration_choices
         ),
     )
-    GROUP_MAP = {"1d": "10m", "3d": "20m", "7d": "1h", "30d": "24h", "365d": "7d"}
+    GROUP_MAP = {"1d": "5m", "3d": "20m", "7d": "1h", "30d": "24h", "365d": "7d"}
     DEFAULT_TIME = DEFAULT_CHART_TIME
 
     class Meta:
