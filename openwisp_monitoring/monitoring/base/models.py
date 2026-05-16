@@ -667,13 +667,13 @@ class AbstractChart(TimeStampedEditableModel):
             or time[-1] != "d"
         ):
             return cls.GROUP_MAP
-        group = "10m"
+        group = "5m"
         days = int(time.split("d")[0])
         # Use copy of class variable to avoid unpredictable results
         custom_group_map = cls.GROUP_MAP.copy()
         # custom grouping between 1 to 2 days
         if days > 0 and days < 3:
-            group = "10m"
+            group = "5m"
         # custom grouping between 3 to 6 days (base 5)
         elif days >= 3 and days < 7:
             group = str(5 * round(((days / 3) * 20) / 5)) + "m"
