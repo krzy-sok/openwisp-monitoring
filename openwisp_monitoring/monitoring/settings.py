@@ -61,7 +61,10 @@ ADDITIONAL_METRICS = get_settings_value("METRICS",
                     "order": 200,
                     "query": {
                         "influxdb":(
-                            "SELECT mean(probability) as probability FROM sniffer_proba "+
+                            "SELECT mean(probability) as probability, "+
+                            "max(probability) as max_probability, "+
+                            "min(probability) as min_probability "
+                            " FROM sniffer_proba "+
                             "WHERE ip = '{ip}' "+
                             "AND time >= '{time}' "+
                             "AND object_id = '{object_id}' "+
